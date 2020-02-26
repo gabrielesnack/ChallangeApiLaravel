@@ -8,3 +8,5 @@ Route::get('/teste/{name}', function (Request $request) {
       "message" => $request->name
   ];
 });
+
+Route::get('/teste/{name}', "UserController@IsUserStudent");
