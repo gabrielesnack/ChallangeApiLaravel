@@ -10,3 +10,5 @@ Route::get('/teste/{name}', function (Request $request) {
 });
 
 Route::get('/teste/{name}', "UserController@IsUserStudent");
+
+Route::post('/create', "User\\UserController@CreateUser");

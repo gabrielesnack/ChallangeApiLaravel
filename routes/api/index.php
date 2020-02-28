@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
     Route::prefix('/v1')->group(function () {
         $path = "routes/api/";
 
+        Route::prefix('/auth')
+        ->group(base_path( $path . 'auth/auth.php'));
+
         Route::prefix('/user')
         ->group(base_path( $path . 'user/user.php'));
 
