@@ -8,9 +8,21 @@ use App\Services\User\UserFactory;
 
 class UserController extends Controller
 {
-    public function CreateUser(Request $request)
+    private $request;
+    private $userFactory;
+
+    public function __construct(Request $request, UserFactory $user)
     {
-        $user = new UserFactory();
-        return $user->Create($request);
+        $this->request = $request;
+        $this->userFactory = $user;
+    }
+
+    public function createUser(Request $request)
+    {
+        $response = $this->userFactory->create($request);
+        return [
+            "error" => false,
+            "data" => $response
+        ];
     }
 }

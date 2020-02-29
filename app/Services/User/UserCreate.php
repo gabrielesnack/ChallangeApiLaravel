@@ -10,14 +10,11 @@ class UserCreate
 
     public function __construct(Request $request)
     {
-      $this->request = $request;
+        $this->request = $request;
     }
 
     public function execute()
     {
-        return [
-          "error" => false,
-          "message" => $this->request->all()
-        ];
+        return $this->request->all();
     }
 }
