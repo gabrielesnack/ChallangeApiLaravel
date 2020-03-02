@@ -5,26 +5,36 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\User;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    private $request;
+
+    public function __construct(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
-
-        if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return $this->respondWithToken($token);
+        $this->request = $request;
+        $this->middleware('jwt.auth:api', ['except' => ['login']]);
     }
 
-    protected function respondWithToken($token)
+    public function login()
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
-        ]);
+        $credentials = $this->request->only(['email', 'password']);
+        $user = User::where($credentials)->first();
+
+        if ($user != null) {
+          return auth()->login($user);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    public function logout() {
+        auth()->logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function me() {
+        return response()->json(auth()->user());
     }
 }
